@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBA - Eventos Buenos Aires</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ebaViolet: '#7C3AED',
+                        ebaCyan: '#06B6D4',
+                        ebaDark: '#1F2937',
+                        ebaLight: '#F9FAFB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1F2937;
+        }
+        
+        /* Utilidades para transiciones suaves del simulador */
+        .sim-view {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .sim-hidden {
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Spinner personalizado */
+        .loader {
+            border: 4px solid rgba(6, 182, 212, 0.2);
+            border-left-color: #7C3AED;
+            border-right-color: #06B6D4;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Efecto Neón sutil para el contenedor de la app */
+        .app-container {
+            box-shadow: 0 10px 40px -10px rgba(124, 58, 237, 0.2), 0 0 20px rgba(6, 182, 212, 0.15);
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden selection:bg-ebaViolet selection:text-white">
+
+    <header class="max-w-6xl mx-auto px-6 pt-16 pb-12 text-center">
+        <div class="flex justify-center mb-6">
+            <img src="logo eba ORIGINAL.png" alt="Logo eBA" class="h-24 w-auto object-contain drop-shadow-md">
+        </div>
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-ebaViolet to-ebaCyan">
+                eBA
+            </span>
+        </h1>
+        <p class="text-xl md:text-2xl font-medium text-gray-600 mb-2">
+            Conecta. Descubre. Comparte.
+        </p>
+        <p class="text-lg text-gray-500 mb-8 max-w-2xl mx-auto">
+            Conectar para disfrutar. La app que asegura que nunca más te pierdas una experiencia cultural en Buenos Aires por no tener con quién ir.
+        </p>
+        
+        <div class="flex justify-center gap-4 mb-8">
+            <div class="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl font-semibold text-sm cursor-pointer hover:bg-gray-800 transition">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.04 2.34-.85 3.73-.7 1.83.18 3.05.9 3.86 2.3-3.2 1.86-2.65 5.92.51 7.15-.65 1.63-1.57 3.3-3.18 4.42zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+                <div class="text-left">
+                    <div class="text-[10px] leading-none text-gray-300">Próximamente en</div>
+                    <div class="text-sm leading-tight">App Store</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl font-semibold text-sm cursor-pointer hover:bg-gray-800 transition">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3 20.5v-17c0-.83.67-1.5 1.5-1.5h15c.83 0 1.5.67 1.5 1.5v17c0 .83-.67 1.5-1.5 1.5h-15c-.83 0-1.5-.67-1.5-1.5zm8.5-14.5v5H8l4 4 4-4h-3.5v-5h-3z"/></svg>
+                <div class="text-left">
+                    <div class="text-[10px] leading-none text-gray-300">Próximamente en</div>
+                    <div class="text-sm leading-tight">Google Play</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="max-w-5xl mx-auto px-6 pb-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition duration-300 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-full h-1 bg-ebaViolet"></div>
+                <div class="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center text-ebaViolet mb-4 group-hover:scale-110 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">DESCUBRE</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    Explorá los mejores eventos de Buenos Aires según tus intereses en un feed personalizado. Teatro, conciertos, boliches, ferias y más.
+                </p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition duration-300 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-ebaViolet to-ebaCyan"></div>
+                <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-ebaCyan mb-4 group-hover:scale-110 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">CONECTA</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    Encontrá personas reales con tus mismos gustos musicales o culturales y chateá para armar un grupo seguro antes de salir.
+                </p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition duration-300 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-full h-1 bg-ebaCyan"></div>
+                <div class="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center text-ebaCyan mb-4 group-hover:scale-110 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">COMPARTE</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    ¡No te pierdas ningún evento más! Viví la experiencia acompañado, compartí el momento y expandí tu círculo social.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-full px-4 pb-20 flex justify-center">
+        <div class="app-container w-full max-w-[400px] h-[750px] bg-gray-50 rounded-[2.5rem] border-[8px] border-gray-900 relative overflow-hidden flex flex-col">
+            
+            <div class="h-6 w-full bg-transparent flex justify-between items-center px-6 pt-2 absolute top-0 z-20">
+                <span class="text-xs font-semibold text-gray-800">19:00</span>
+                <div class="flex gap-1.5">
+                    <div class="w-3 h-3 rounded-full bg-gray-800"></div>
+                    <div class="w-4 h-3 rounded-sm bg-gray-800"></div>
+                </div>
+            </div>
+
+            <div class="flex-1 relative mt-8">
+                
+                <div id="view-categories" class="sim-view h-full flex flex-col p-6 pt-8">
+                    <h2 class="text-2xl font-extrabold text-gray-900 mb-2 leading-tight">Probá eBA en vivo</h2>
+                    <p class="text-gray-500 mb-6 text-sm">¿Cuál es tu plan ideal para este finde?</p>
+                    
+                    <div class="grid grid-cols-2 gap-4 flex-1 content-start">
+                        <button onclick="selectCategory('Teatro')" class="flex flex-col items-center justify-center p-4 bg-white rounded-2xl border-2 border-purple-100 hover:border-ebaViolet hover:bg-purple-50 transition shadow-sm group">
+                            <span class="text-3xl mb-2 group-hover:scale-110 transition">🎭</span>
+                            <span class="text-sm font-semibold text-gray-700">Teatro</span>
+                        </button>
+                        <button onclick="selectCategory('Concierto')" class="flex flex-col items-center justify-center p-4 bg-white rounded-2xl border-2 border-blue-100 hover:border-ebaCyan hover:bg-blue-50 transition shadow-sm group">
+                            <span class="text-3xl mb-2 group-hover:scale-110 transition">🎤</span>
+                            <span class="text-sm font-semibold text-gray-700">Concierto</span>
+                        </button>
+                        <button onclick="selectCategory('Festival de Música')" class="flex flex-col items-center justify-center p-4 bg-white rounded-2xl border-2 border-purple-100 hover:border-ebaViolet hover:bg-purple-50 transition shadow-sm group">
+                            <span class="text-3xl mb-2 group-hover:scale-110 transition">🎪</span>
+                            <span class="text-sm font-semibold text-gray-700 text-center leading-tight">Festival de<br>Música</span>
+                        </button>
+                        <button onclick="selectCategory('Electrónica')" class="flex flex-col items-center justify-center p-4 bg-white rounded-2xl border-2 border-blue-100 hover:border-ebaCyan hover:bg-blue-50 transition shadow-sm group">
+                            <span class="text-3xl mb-2 group-hover:scale-110 transition">⚡</span>
+                            <span class="text-sm font-semibold text-gray-700 text-center leading-tight">Festival de<br>Electrónica</span>
+                        </button>
+                        <button onclick="selectCategory('Boliche')" class="flex flex-col items-center justify-center p-4 bg-white rounded-2xl border-2 border-purple-100 hover:border-ebaViolet hover:bg-purple-50 transition shadow-sm group">
+                            <span class="text-3xl mb-2 group-hover:scale-110 transition">🕺</span>
+                            <span class="text-sm font-semibold text-gray-700 text-center leading-tight">Noche de<br>boliche</span>
+                        </button>
+                        <button onclick="selectCategory('Gastronomía')" class="flex flex-col items-center justify-center p-4 bg-white rounded-2xl border-2 border-blue-100 hover:border-ebaCyan hover:bg-blue-50 transition shadow-sm group">
+                            <span class="text-3xl mb-2 group-hover:scale-110 transition">🍔</span>
+                            <span class="text-sm font-semibold text-gray-700 text-center leading-tight">Feria<br>Gastronómica</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="view-loading" class="sim-view sim-hidden h-full flex flex-col items-center justify-center p-6 bg-white">
+                    <img src="1000399443.jpg" alt="Mascota eBA" class="w-40 h-40 object-cover rounded-full mb-8 shadow-md">
+                    <div class="loader mb-6"></div>
+                    <p id="loading-text" class="text-center font-medium text-gray-600 text-lg animate-pulse">
+                        Buscando personas con tus mismos gustos...
+                    </p>
+                </div>
+
+                <div id="view-matches" class="sim-view sim-hidden h-full flex flex-col bg-gray-50">
+                    <div class="px-6 py-4 bg-white border-b border-gray-200 flex items-center justify-between shadow-sm z-10">
+                        <h3 class="font-bold text-gray-800" id="matches-title">Resultados</h3>
+                        <span class="bg-ebaViolet text-white text-xs font-bold px-2 py-1 rounded-full">2 Encontrados</span>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4" id="matches-container">
+                        </div>
+                </div>
+
+                <div id="view-success" class="sim-view sim-hidden h-full flex flex-col items-center justify-center p-8 bg-gradient-to-b from-white to-purple-50 text-center">
+                    <div class="w-20 h-20 bg-gradient-to-tr from-ebaCyan to-ebaViolet rounded-full flex items-center justify-center text-white shadow-lg mb-6 shadow-cyan-200">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-4">¡Conexión exitosa!</h2>
+                    <p class="text-gray-600 mb-8 text-lg">Ya tenés con quién compartir tu salida. Que nadie se quede afuera.</p>
+                    
+                    <button onclick="resetSimulator()" class="w-full bg-gray-900 text-white font-bold py-4 rounded-xl hover:bg-gray-800 transition active:scale-95 shadow-md">
+                        Volver a simular
+                    </button>
+                </div>
+
+            </div>
+            
+            <div class="h-16 bg-white border-t border-gray-200 flex justify-around items-center px-4 pb-2 z-20">
+                <div class="w-8 h-8 rounded-full bg-ebaViolet opacity-20"></div>
+                <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+                <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Base de datos simulada de perfiles orientada a los gustos específicos
+        const profilesDB = {
+            'Teatro': [
+                { nombre: 'Sofía, 22', bio: 'Amante del diseño, escenografías y obras independientes en la calle Corrientes.', tags: ['Diseño', 'Drama', 'Cultural'], match: 94 },
+                { nombre: 'Martín, 24', bio: 'Salidas culturales y debate post-teatro. Si hay buen café, mejor.', tags: ['Independiente', 'Café', 'Charlas'], match: 88 }
+            ],
+            'Concierto': [
+                { nombre: 'Camila, 21', bio: 'Swiftie de alma, fan de Taylor Swift y Charli xcx. ¡Lista para saltar en el pogo!', tags: ['Pop', 'Taylor Swift', 'Charli xcx'], match: 96 },
+                { nombre: 'Julián, 25', bio: 'Fan de Oasis esperando el regreso, full rock británico y cervezas previas.', tags: ['Rock', 'Oasis', 'Indie'], match: 92 }
+            ],
+            'Festival de Música': [
+                { nombre: 'Valentina, 23', bio: 'Indie y pop alternativo. Fan de Lorde y Tame Impala, siempre en primera fila.', tags: ['Lorde', 'Tame Impala', 'Indie'], match: 94 },
+                { nombre: 'Lucas, 22', bio: 'Manija de Ca7riel y Paco Amoroso, trap y urbano a full. Modo festival ON.', tags: ['Urbano', 'Ca7riel', 'Trap'], match: 95 }
+            ],
+            'Electrónica': [
+                { nombre: 'Micaela, 24', bio: 'Vibrando con Arca y Björk, buscando siempre electrónica experimental y visuales locas.', tags: ['Arca', 'Björk', 'Experimental'], match: 97 },
+                { nombre: 'Tomás, 26', bio: 'Buscando raves locales, full techno oscuro y house toda la noche.', tags: ['Techno', 'Rave', 'House'], match: 89 }
+            ],
+            'Boliche': [
+                { nombre: 'Agustina, 21', bio: 'Fan de Bad Gyal, modo fiesta activo. Siempre lista para el perreo y los temazos.', tags: ['Bad Gyal', 'Reggaeton', 'Fiesta'], match: 93 },
+                { nombre: 'Facundo, 23', bio: 'Previa, boliche y after. Dispuesto a darlo todo en la pista hasta las 6 AM.', tags: ['Cachengue', 'After', 'Amigos'], match: 90 }
+            ],
+            'Gastronomía': [
+                { nombre: 'Lucía, 25', bio: 'Siempre buscando el mejor Sake Nigiri o reservando mesa en Chuí para probar cosas nuevas.', tags: ['Sake Nigiri', 'Chuí', 'Foodie'], match: 98 },
+                { nombre: 'Joaquín, 24', bio: 'Fan del shakshuka, comida mediterránea, italiana y de autor. Buen paladar.', tags: ['Shakshuka', 'Mediterránea', 'Pastas'], match: 94 }
+            ]
+        };
+
+        // Función para cambiar entre vistas
+        function switchView(hideId, showId) {
+            const hideEl = document.getElementById(hideId);
+            const showEl = document.getElementById(showId);
+            
+            hideEl.classList.add('sim-hidden');
+            setTimeout(() => {
+                showEl.classList.remove('sim-hidden');
+            }, 50); // Pequeño delay para la transición CSS
+        }
+
+        // Paso 1 a 2: Seleccionar Categoría y Cargar
+        function selectCategory(category) {
+            // Actualizar texto de carga
+            document.getElementById('loading-text').innerText = `Buscando personas para ir a ${category}...`;
+            
+            // Cambiar a vista de carga
+            switchView('view-categories', 'view-loading');
+            
+            // Generar los perfiles mientras "carga"
+            generarTarjetasMatches(category);
+
+            // Simular tiempo de búsqueda de 2 segundos
+            setTimeout(() => {
+                switchView('view-loading', 'view-matches');
+            }, 2000);
+        }
+
+        // Generador de Tarjetas de Perfil en el DOM
+        function generarTarjetasMatches(category) {
+            const container = document.getElementById('matches-container');
+            document.getElementById('matches-title').innerText = category;
+            container.innerHTML = ''; // Limpiar anteriores
+            
+            const perfiles = profilesDB[category];
+            
+            perfiles.forEach((perfil, index) => {
+                // Crear avatar aleatorio basado en índice
+                const avatarColor = index === 0 ? 'bg-ebaViolet' : 'bg-ebaCyan';
+                const inicial = perfil.nombre.charAt(0);
+                
+                const cardHTML = `
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="w-14 h-14 rounded-full ${avatarColor} flex items-center justify-center text-white text-xl font-bold">
+                                ${inicial}
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-gray-900 text-lg">${perfil.nombre}</h4>
+                                <div class="flex items-center gap-1 text-sm font-semibold text-green-500">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                    ${perfil.match}% Compatibilidad
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4 italic">"${perfil.bio}"</p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${perfil.tags.map(tag => `<span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md font-medium">${tag}</span>`).join('')}
+                        </div>
+                        
+                        <button onclick="conectarExito()" class="w-full bg-gradient-to-r from-ebaCyan to-blue-500 hover:from-blue-500 hover:to-ebaCyan text-white font-bold py-3 rounded-xl transition shadow-md active:scale-95 flex justify-center items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            Conectar
+                        </button>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        // Paso 3 a 4: Conectar y Confeti
+        function conectarExito() {
+            switchView('view-matches', 'view-success');
+            
+            // Disparar Confeti de canvas-confetti
+            var duration = 3000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#7C3AED', '#06B6D4', '#ffffff']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#7C3AED', '#06B6D4', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        // Reiniciar flujo
+        function resetSimulator() {
+            switchView('view-success', 'view-categories');
+        }
+    </script>
+</body>
+</html>
