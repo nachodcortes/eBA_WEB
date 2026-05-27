@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eBA - Eventos Buenos Aires</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -18,20 +20,18 @@
                         ebaLight: '#F9FAFB'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        sans: ['Poppins', 'system-ui', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #ffffff;
             color: #1F2937;
         }
@@ -71,38 +71,39 @@
             box-shadow: 0 10px 40px -10px rgba(124, 58, 237, 0.2), 0 0 20px rgba(6, 182, 212, 0.15);
         }
     </style>
-    <nav class="bg-ebaViolet text-white text-center py-2 font-bold tracking-widest text-sm md:text-base shadow-sm">
-        🚀 PRÓXIMAMENTE 🚀
-    </nav>
 </head>
 <body class="antialiased overflow-x-hidden selection:bg-ebaViolet selection:text-white">
 
+    <nav class="sticky top-0 z-50 bg-ebaViolet text-white text-center py-3 font-bold tracking-widest text-sm md:text-base shadow-md">
+        🚀 PRÓXIMAMENTE 🚀
+    </nav>
+
     <header class="max-w-6xl mx-auto px-6 pt-16 pb-12 text-center">
         <div class="flex justify-center mb-6">
-            <img src="logoeba.png" alt="Logo eBA" class="h-24 w-auto object-contain drop-shadow-md">
+            <img src="logoeba.png" alt="Logo eBA" class="h-32 md:h-40 w-auto object-contain drop-shadow-md">
         </div>
+        
         <h1 class="text-6xl md:text-8xl font-black tracking-tight mb-4 text-ebaDark">
             eBA
         </h1>
         <p class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ebaViolet to-ebaCyan mb-4">
             CONECTA. DESCUBRE. COMPARTE.
         </p>
-        <p class="text-lg text-gray-500 mb-8 max-w-2xl mx-auto">
+        
+        <p class="text-lg text-gray-500 mb-8 max-w-2xl mx-auto font-medium">
             Conectar para disfrutar. La app que asegura que nunca más te pierdas una experiencia cultural en Buenos Aires por no tener con quién ir.
         </p>
         
         <div class="flex justify-center gap-4 mb-8">
-            <div class="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl font-semibold text-sm cursor-pointer hover:bg-gray-800 transition">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.04 2.34-.85 3.73-.7 1.83.18 3.05.9 3.86 2.3-3.2 1.86-2.65 5.92.51 7.15-.65 1.63-1.57 3.3-3.18 4.42zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+            <div class="flex items-center gap-3 bg-black text-white px-5 py-2.5 rounded-xl font-semibold text-sm cursor-pointer hover:bg-gray-800 transition">
+                <img src="apple.png" alt="App Store logo" class="w-6 h-6 object-contain invert">
                 <div class="text-left">
                     <div class="text-[10px] leading-none text-gray-300">Próximamente en</div>
                     <div class="text-sm leading-tight">App Store</div>
                 </div>
             </div>
-            <div class="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl font-semibold text-sm cursor-pointer hover:bg-gray-800 transition">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M3.568 2.012c-.22.18-.368.514-.368.966v18.044c0 .452.148.786.368.966l.044.037 10.158-10.158v-.091L3.612 1.975l-.044.037zM14.935 13.045l-2.613-2.614-2.614-2.613 8.358-4.747c.594-.338 1.055-.008 1.055.672v16.513c0 .683-.46.994-1.055.672l-8.358-4.747 2.614-2.614 2.613-2.613v.091z"/>
-                </svg>
+            <div class="flex items-center gap-3 bg-black text-white px-5 py-2.5 rounded-xl font-semibold text-sm cursor-pointer hover:bg-gray-800 transition">
+                <img src="playstore.jpg" alt="Google Play logo" class="w-6 h-6 object-cover rounded-sm">
                 <div class="text-left">
                     <div class="text-[10px] leading-none text-gray-300">Próximamente en</div>
                     <div class="text-sm leading-tight">Google Play</div>
@@ -192,7 +193,7 @@
                 </div>
 
                 <div id="view-loading" class="sim-view sim-hidden h-full flex flex-col items-center justify-center p-6 bg-white">
-                    <img src="ebiebu.png" alt="Mascota eBA" class="w-40 h-40 object-cover rounded-full mb-8 shadow-md">
+                    <img src="ebiebu.jpg" alt="Mascota eBA" class="w-40 h-40 object-cover rounded-full mb-8 shadow-md">
                     <div class="loader mb-6"></div>
                     <p id="loading-text" class="text-center font-medium text-gray-600 text-lg animate-pulse">
                         Buscando personas con tus mismos gustos...
@@ -232,7 +233,6 @@
     </section>
 
     <script>
-        // Base de datos simulada de perfiles orientada a los gustos específicos
         const profilesDB = {
             'Teatro': [
                 { nombre: 'Sofía, 22', bio: 'Amante del diseño, escenografías y obras independientes en la calle Corrientes.', tags: ['Diseño', 'Drama', 'Cultural'], match: 94 },
@@ -260,7 +260,6 @@
             ]
         };
 
-        // Función para cambiar entre vistas
         function switchView(hideId, showId) {
             const hideEl = document.getElementById(hideId);
             const showEl = document.getElementById(showId);
@@ -268,36 +267,27 @@
             hideEl.classList.add('sim-hidden');
             setTimeout(() => {
                 showEl.classList.remove('sim-hidden');
-            }, 50); // Pequeño delay para la transición CSS
+            }, 50); 
         }
 
-        // Paso 1 a 2: Seleccionar Categoría y Cargar
         function selectCategory(category) {
-            // Actualizar texto de carga
             document.getElementById('loading-text').innerText = `Buscando personas para ir a ${category}...`;
-            
-            // Cambiar a vista de carga
             switchView('view-categories', 'view-loading');
-            
-            // Generar los perfiles mientras "carga"
             generarTarjetasMatches(category);
 
-            // Simular tiempo de búsqueda de 2 segundos
             setTimeout(() => {
                 switchView('view-loading', 'view-matches');
             }, 2000);
         }
 
-        // Generador de Tarjetas de Perfil en el DOM
         function generarTarjetasMatches(category) {
             const container = document.getElementById('matches-container');
             document.getElementById('matches-title').innerText = category;
-            container.innerHTML = ''; // Limpiar anteriores
+            container.innerHTML = ''; 
             
             const perfiles = profilesDB[category];
             
             perfiles.forEach((perfil, index) => {
-                // Crear avatar aleatorio basado en índice
                 const avatarColor = index === 0 ? 'bg-ebaViolet' : 'bg-ebaCyan';
                 const inicial = perfil.nombre.charAt(0);
                 
@@ -332,11 +322,9 @@
             });
         }
 
-        // Paso 3 a 4: Conectar y Confeti
         function conectarExito() {
             switchView('view-matches', 'view-success');
             
-            // Disparar Confeti de canvas-confetti
             var duration = 3000;
             var end = Date.now() + duration;
 
@@ -362,7 +350,6 @@
             }());
         }
 
-        // Reiniciar flujo
         function resetSimulator() {
             switchView('view-success', 'view-categories');
         }
